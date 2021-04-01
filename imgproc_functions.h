@@ -13,6 +13,10 @@ typedef struct {
     struct Image *(*transform_image)(struct Image *source, void *arg_data);
 } Plugin;
 
+typedef struct {
+    uint32_t numPlugins; 
+    Plugin * allPlugins; 
+} AllPlugins; 
 
 /*
 *  Searches for available plugin shared libraries, creates an allocated
@@ -20,4 +24,4 @@ typedef struct {
 *
 *
 */
-Plugin * getPlugins();
+AllPlugins getPlugins();

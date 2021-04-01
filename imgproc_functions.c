@@ -8,7 +8,7 @@
 #include "imgproc_functions.h"
 
 
-Plugin * getPlugins() {
+AllPlugins getPlugins() {
     //find directory with plugin shared libraries 
     char * pluginDirName = getenv("PLUGIN_DIR");   //check if PLUGIN_DIR is set
     if (pluginDirName == NULL) { //PLUGIN_DIR not set
@@ -56,6 +56,8 @@ Plugin * getPlugins() {
 	    plugins = (Plugin *)realloc(sizeof(Plugin), pluginCount);
     }
 
-    return plugins; 	
+    AllPlugins all = {pluginCount, plugins};
+
+    return all; 	
 
 }

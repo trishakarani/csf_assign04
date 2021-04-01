@@ -14,13 +14,20 @@ int main(int argc, char** argv) {
 	return 1; 
     }
 
+    AllPlugins all = getPlugins();
+    Plugins * plugins = all.allPlugins; 
     // list command
     if (argc == 2) {
 	    if (strcmp(argv[1], "list") != 0) {
 	        fprintf(stderr, "Error: Unknown command name\n");
 	        return 1; 
+	    } else {
+		printf("Loaded %u plugin(s)\n", all.numPlugins); 
+		for (uint32_t i = 0; i < all.numPlugins; i++) {
+		    printf("%s: %s\n"(all.allPlugins[i]).get_plugin_name(), (all.allPlugins[i]).get_plugin_desc());
+		}
 	    }
-	    printf("Loaded x plugin(s)\n"); 
+	   
     }
     
     // exec command
@@ -28,7 +35,6 @@ int main(int argc, char** argv) {
 	    fprintf(stderr, "Error: Unknown command name\n"); 
 	    return 1; 
     }
-    Plugin * plugins = getPlugins();
     // find a plugin whose name matches
     // name is in argv[2]    
     Plugin * cursor = plugins;
