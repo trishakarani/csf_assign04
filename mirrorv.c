@@ -13,11 +13,11 @@ struct Arguments {
 };
 
 const char *get_plugin_name(void) {
-	return "mirrorh";
+	return "mirrorv";
 }
 
 const char *get_plugin_desc(void) {
-	return "mirror image horizontally";
+	return "mirror image vertically";
 }
 
 void *parse_arguments(int num_args, char *args[]) {
@@ -45,7 +45,7 @@ Image *transform_image(Image *source, void *arg_data) {
     unsigned height = source->height;
     for (unsigned r = 0; r < height; r++) {
         for (unsigned c = 0; c < width; c++) {
-            out->data[r*width + c] = source->data[r*width + (width - 1 - c)];
+            out->data[r*width + c] = source->data[(height - 1 - r)*width + c];
         }
     }
 

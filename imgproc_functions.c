@@ -37,7 +37,7 @@ AllPlugins getPlugins(void) {
 	    *(void **) (&newPlugin.transform_image) = dlsym(newPlugin.handle, "transform_image");
         if (newPlugin.get_plugin_desc == NULL || newPlugin.get_plugin_name == NULL || 
             newPlugin.parse_arguments == NULL || newPlugin.transform_image == NULL) {
-            fprintf(stderr, "Error: Required API function not found\n"); 
+            fatalError("Required API function not found\n"); 
 	      //  return NULL; //CHANGE TO FATAL ERROR FUNCTION 
         }
 	    plugins[pluginCount-1] = newPlugin;  
@@ -61,4 +61,10 @@ AllPlugins getPlugins(void) {
 
     return all; 	
 
+}
+
+void fatalError(char * msg) {
+    printf("Error: ");
+    printf(msg);
+    exit(1);
 }

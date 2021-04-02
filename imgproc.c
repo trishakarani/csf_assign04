@@ -19,8 +19,7 @@ int main(int argc, char** argv) {
     // list command
     if (argc == 2) {
 	    if (strcmp(argv[1], "list") != 0) {
-	        fprintf(stderr, "Error: Unknown command name\n");
-	        return 1; 
+	        fatalError("Unknown command name");
 	    } else {
 		    printf("Loaded %u plugin(s)\n", all.numPlugins); 
 		    for (uint32_t i = 0; i < all.numPlugins; i++) {
@@ -32,8 +31,7 @@ int main(int argc, char** argv) {
     
     // exec command
     if (strcmp(argv[1], "exec") != 0) {
-	    fprintf(stderr, "Error: Unknown command name\n"); 
-	    return 1; 
+	    fatalError("Unknown command name"); 
     }
     // find a plugin whose name matches
     // name is in argv[2]    
@@ -45,8 +43,7 @@ int main(int argc, char** argv) {
         cursor += 1;
     } // cursor should point to correct Plugin object
     if (cursor == NULL) {
-        fprintf(stderr, "Error: Specified plugin not found\n"); 
-	    return 1; 
+        fatalError("Specified plugin not found"); 
     }
     Image * inputImg = img_read_png(argv[3]);
     // creating a plugin argument object - what to do if no addtl args? still call parse_arguments?
@@ -54,8 +51,7 @@ int main(int argc, char** argv) {
     void * argPtr = cursor->parse_arguments(argc - 5, &argv[5]); // will be freed by plugin
     Image * transformedImg = cursor->transform_image(inputImg, argPtr);
     if (img_write_png(transformedImg, argv[4]) == 0) {
-        fprintf(stderr, "Error: Transofrmed image could not be written as png\n"); 
-	    return 1; 
+        fatalError("Transofrmed image could not be written as png");
     }
 
     return 0; 
