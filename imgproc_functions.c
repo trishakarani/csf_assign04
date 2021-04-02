@@ -13,7 +13,7 @@ AllPlugins getPlugins(void) {
     //find directory with plugin shared libraries 
     char * pluginDirName = getenv("PLUGIN_DIR");   //check if PLUGIN_DIR is set
     if (pluginDirName == NULL) { //PLUGIN_DIR not set
-	pluginDirName = "./plugins";
+	    pluginDirName = "./plugins";
     }
 
     DIR * pluginDirPtr = opendir(pluginDirName); 
