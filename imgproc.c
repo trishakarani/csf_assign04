@@ -15,7 +15,7 @@ int main(int argc, char** argv) {
     }
 
     AllPlugins all = getPlugins();
-    Plugins * plugins = all.allPlugins; 
+    Plugin * plugins = all.allPlugins; 
     // list command
     if (argc == 2) {
 	    if (strcmp(argv[1], "list") != 0) {
