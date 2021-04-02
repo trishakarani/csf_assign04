@@ -16,8 +16,11 @@ plugins/%.so : %.o
 
 all : imgproc $(PLUGINS)
 
-imgproc : imgproc.o image.o pnglite.o
-	$(CC) -export-dynamic -o $@ imgproc.o image.o pnglite.o -lz -ldl
+imgproc : imgproc.o image.o pnglite.o imgproc_functions.o
+	$(CC) -export-dynamic -o $@ imgproc.o image.o pnglite.o imgproc_functions.o -lz -ldl
+
+imgproc_functions.o : imgproc_functions.c imgproc_functions.h
+	$(CC) $(CFLAGS) -c imgproc_functions.c 
 
 plugins/swapbg.so : swapbg.o
 

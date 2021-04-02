@@ -24,7 +24,7 @@ int main(int argc, char** argv) {
 	    } else {
 		printf("Loaded %u plugin(s)\n", all.numPlugins); 
 		for (uint32_t i = 0; i < all.numPlugins; i++) {
-		    printf("%s: %s\n"(all.allPlugins[i]).get_plugin_name(), (all.allPlugins[i]).get_plugin_desc());
+		    printf("%s: %s\n", plugins[i].get_plugin_name(), plugins[i].get_plugin_desc());
 		}
 	    }
 	   

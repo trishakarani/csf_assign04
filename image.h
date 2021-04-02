@@ -28,17 +28,17 @@ typedef struct {
 // All red, green, blue, and alpha values are set to 0.
 // Returns NULL if the Image can't be created.
 //
-struct Image *img_create(unsigned width, unsigned height);
+Image *img_create(unsigned width, unsigned height);
 
 //
 // Return an exact duplicate of given Image.
 //
-struct Image *img_duplicate(struct Image *img);
+Image *img_duplicate(Image *img);
 
 //
 // Free the memory of the given Image.
 //
-void img_destroy(struct Image *img);
+void img_destroy(Image *img);
 
 //
 // Read a PNG file, returning a pointer to an Image
@@ -46,13 +46,13 @@ void img_destroy(struct Image *img);
 // PNG files are supported.  Returns NULL if the PNG file
 // can't be read successfully.
 //
-struct Image *img_read_png(const char *filename);
+Image *img_read_png(const char *filename);
 
 //
 // Write specified Image to an output PNG file.
 // Returns 1 if the PNG file was written successfully, 0 otherwise.
 //
-int img_write_png(struct Image *img, const char *filename);
+int img_write_png(Image *img, const char *filename);
 
 //
 // Unpack a 32-bit encoded RGBA pixel value as separate red, green, blue, and alpha

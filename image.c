@@ -11,10 +11,10 @@
 
 static int s_pnglite_init;
 
-struct Image *img_create(unsigned width, unsigned height) {
-	struct Image *img;
+Image *img_create(unsigned width, unsigned height) {
+	Image *img;
 
-	img = malloc(sizeof(struct Image));
+	img = malloc(sizeof(Image));
 	if (!img) {
 		return NULL;
 	}
@@ -35,22 +35,22 @@ struct Image *img_create(unsigned width, unsigned height) {
 	return img;
 }
 
-struct Image *img_duplicate(struct Image *img) {
-	struct Image *dup = img_create(img->width, img->height);
+Image *img_duplicate(Image *img) {
+	Image *dup = img_create(img->width, img->height);
 	if (dup) {
 		memcpy(dup->data, img->data, img->width * img->height * sizeof(uint32_t));
 	}
 	return dup;
 }
 
-void img_destroy(struct Image *img) {
+void img_destroy(Image *img) {
 	if (img) {
 		free(img->data);
 		free(img);
 	}
 }
 
-struct Image *img_read_png(const char *filename) {
+Image *img_read_png(const char *filename) {
 	if (!s_pnglite_init) {
 		png_init(0, 0);
 	}
@@ -85,7 +85,7 @@ struct Image *img_read_png(const char *filename) {
 	}
 
 	// Create Image object
-	struct Image *img = img_create(png.width, png.height);
+	Image *img = img_create(png.width, png.height);
 	if (!img) {
 		free(pixel_data);
 		png_close_file(&png);
@@ -112,7 +112,7 @@ struct Image *img_read_png(const char *filename) {
 	return img;
 }
 
-int img_write_png(struct Image *img, const char *filename) {
+int img_write_png(Image *img, const char *filename) {
 	if (!s_pnglite_init) {
 		png_init(0, 0);
 	}

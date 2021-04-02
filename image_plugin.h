@@ -45,7 +45,7 @@ void *parse_arguments(int num_args, char *args[]);
 // This function should free any memory allocated for arg_data
 // by the previous call to parse_arguments.
 //
-struct Image *transform_image(struct Image *source, void *arg_data);
+Image *transform_image(Image *source, void *arg_data);
 
 #ifdef __cplusplus
 }

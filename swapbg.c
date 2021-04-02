@@ -36,11 +36,11 @@ static uint32_t swap_bg(uint32_t pix) {
 	return img_pack_pixel(r, b, g, a);
 }
 
-struct Image *transform_image(struct Image *source, void *arg_data) {
+Image *transform_image(Image *source, void *arg_data) {
 	struct Arguments *args = arg_data;
 
 	// Allocate a result Image
-	struct Image *out = img_create(source->width, source->height);
+	Image *out = img_create(source->width, source->height);
 	if (!out) {
 		free(args);
 		return NULL;
