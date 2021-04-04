@@ -25,6 +25,6 @@ typedef struct {
 */
 AllPlugins getPlugins(void);
 
-void nothing(void); 
+void fatalError(char * msg);
 
 #endif

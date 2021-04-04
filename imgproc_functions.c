@@ -13,7 +13,7 @@ AllPlugins getPlugins(void) {
     //find directory with plugin shared libraries 
     char * pluginDirName = getenv("PLUGIN_DIR");   //check if PLUGIN_DIR is set
     if (pluginDirName == NULL) { //PLUGIN_DIR not set
-	pluginDirName = "./plugins";
+	    pluginDirName = "./plugins";
     }
 
     DIR * pluginDirPtr = opendir(pluginDirName); 
@@ -37,7 +37,7 @@ AllPlugins getPlugins(void) {
 	    *(void **) (&newPlugin.transform_image) = dlsym(newPlugin.handle, "transform_image");
         if (newPlugin.get_plugin_desc == NULL || newPlugin.get_plugin_name == NULL || 
             newPlugin.parse_arguments == NULL || newPlugin.transform_image == NULL) {
-            fprintf(stderr, "Error: Required API function not found\n"); 
+            fatalError("Required API function not found\n"); 
 	      //  return NULL; //CHANGE TO FATAL ERROR FUNCTION 
         }
 	    plugins[pluginCount-1] = newPlugin;  
@@ -63,7 +63,8 @@ AllPlugins getPlugins(void) {
 
 }
 
-void nothing(void) {
-    int i; 
-    i++; 
+void fatalError(char * msg) {
+    printf("Error: ");
+    printf(msg);
+    exit(1);
 }
