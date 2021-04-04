@@ -25,5 +25,6 @@ typedef struct {
 */
 AllPlugins getPlugins(void);
 
+void nothing(void); 
 
 #endif

@@ -62,3 +62,8 @@ AllPlugins getPlugins(void) {
     return all; 	
 
 }
+
+void nothing(void) {
+    int i; 
+    i++; 
+}
