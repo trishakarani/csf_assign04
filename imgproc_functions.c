@@ -65,6 +65,6 @@ AllPlugins getPlugins(void) {
 
 void fatalError(char * msg) {
     printf("Error: ");
-    printf(msg);
+    printf("%s", msg);
     exit(1);
 }
