@@ -5,8 +5,7 @@
 #include "image.h"
 #include "image_plugin.h"
 #include "pnglite.h"
-#include "imgproc_functions.c"
-
+#include "imgproc_functions.h"
 int main(int argc, char** argv) {
 
     if (argc == 1) {

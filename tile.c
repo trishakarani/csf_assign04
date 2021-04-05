@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <stdio.h>
 #include "image_plugin.h"
 
 struct Arguments {
