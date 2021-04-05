@@ -9,7 +9,7 @@
 int main(int argc, char** argv) {
 
     if (argc == 1) {
-	    fprintf(stderr, "Usage: imgproc <command> [<command args...>]\nCommands are:\n\tlist\n\texec <plugin> <input img> <output img> [<plugin args...>]");
+	    fprintf(stderr, "Usage: imgproc <command> [<command args...>]\nCommands are:\n\tlist\n\texec <plugin> <input img> <output img> [<plugin args...>]\n");
 	    return 1; 
     }
 

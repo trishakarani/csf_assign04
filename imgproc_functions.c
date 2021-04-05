@@ -29,8 +29,10 @@ AllPlugins getPlugins(void) {
 	    if (pluginCount > 5) {
 		    plugins = (Plugin *)realloc(plugins, sizeof(Plugin) * pluginCount); 
 	    }
+	    char pluginPath[1000];
+	    sprintf(pluginPath, "%s/%s", pluginDirName, filePtr->d_name);
 	    Plugin newPlugin; 
-	    newPlugin.handle = dlopen(filePtr->d_name, RTLD_LAZY); 
+	    newPlugin.handle = dlopen(pluginPath, RTLD_LAZY);
 	    *(void **) (&newPlugin.get_plugin_name) = dlsym(newPlugin.handle, "get_plugin_name");
 	    *(void **) (&newPlugin.get_plugin_desc) = dlsym(newPlugin.handle, "get_plugin_desc"); 
 	    *(void **) (&newPlugin.parse_arguments) = dlsym(newPlugin.handle, "parse_arguments"); 

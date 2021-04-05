@@ -10,7 +10,7 @@ const char *get_plugin_name(void) {
 }
 
 const char *get_plugin_desc(void) {
-    return "changes all red/green/blue color component values by a specified factor"; 
+    return "adjust the intensity of all pixels";
 }
 
 void *parse_arguments(int num_args, char *args[]) {
