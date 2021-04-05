@@ -47,7 +47,7 @@ int main(int argc, char** argv) {
     Image * inputImg = img_read_png(argv[3]);
     // creating a plugin argument object - what to do if no addtl args? still call parse_arguments?
     // yes still call parse_arguments, see swapbg - takes no args, just returns an empty allocated chunk
-    void * argPtr = cursor->parse_arguments(argc - 5, &argv[5]); // will be freed by plugin
+    void * argPtr = cursor->parse_arguments(argc - 5, argv + 5); // will be freed by plugin
     Image * transformedImg = cursor->transform_image(inputImg, argPtr); // check for null?
     if (img_write_png(transformedImg, argv[4]) == 0) {
         fatalError("Transofrmed image could not be written as png");
