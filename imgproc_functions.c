@@ -35,17 +35,19 @@ AllPlugins getPlugins(void) {
 	    *(void **) (&newPlugin.get_plugin_desc) = dlsym(newPlugin.handle, "get_plugin_desc"); 
 	    *(void **) (&newPlugin.parse_arguments) = dlsym(newPlugin.handle, "parse_arguments"); 
 	    *(void **) (&newPlugin.transform_image) = dlsym(newPlugin.handle, "transform_image");
-        if (newPlugin.get_plugin_desc == NULL || newPlugin.get_plugin_name == NULL || 
-            newPlugin.parse_arguments == NULL || newPlugin.transform_image == NULL) {
-            fatalError("Required API function not found\n"); 
-	      //  return NULL; //CHANGE TO FATAL ERROR FUNCTION 
-        }
+
+	    if (newPlugin.get_plugin_desc == NULL || newPlugin.get_plugin_name == NULL || 
+		newPlugin.parse_arguments == NULL || newPlugin.transform_image == NULL) {
+		fatalError("Required API function not found\n"); 
+	    }
 	    plugins[pluginCount-1] = newPlugin;  
+	    filePtr = readdir(pluginDirPtr);
 	} else {
+	    filePtr = readdir(pluginDirPtr);
 	    continue; 
+
 	}
 
-	filePtr = readdir(pluginDirPtr);
     }
 
     closedir(pluginDirPtr);

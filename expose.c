@@ -16,11 +16,13 @@ const char *get_plugin_desc(void) {
 void *parse_arguments(int num_args, char *args[]) {
     //check if factor is neg - fatalerror
     if (num_args != 1) {
-        fatalError("Incorrect number of arguments for expose\n");
+       // fatalError("Incorrect number of arguments for expose\n");
+       exit(1); 
     }
     float factor = atof(args[0]);
     if (factor < 0) {
-        fatalError("Factor can not be negative\n");
+        //fatalError("Factor can not be negative\n");
+        exit(1); 
     }
     struct Arguments argObj = {factor};
     struct Arguments * argPtr = malloc(sizeof(struct Arguments));
@@ -33,11 +35,12 @@ static uint32_t expose_rbg(uint32_t pix, float factor) {
 	uint8_t r, g, b, a; 
 	img_unpack_pixel(pix, &r, &g, &b, &a); 
 	
-	r *= factor; g *= factor; b *= factor; 
-	if (r > 255) { r = 255; }
-	if (g > 255) { g = 255; }
-	if (b > 255) { b = 255; }
-
+	if (r*factor > 255) { r = 255; } 
+	    else { r  *= factor; }
+	if (g*factor > 255) { g = 255; } 
+            else { g  *= factor; }
+        if (b*factor > 255) { b = 255; } 
+            else { b  *= factor; }
 	return img_pack_pixel(r, b, g, a); 
 
 }
