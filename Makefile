@@ -23,6 +23,10 @@ imgproc_functions.o : imgproc_functions.c imgproc_functions.h
 	$(CC) $(CFLAGS) -c imgproc_functions.c 
 
 plugins/swapbg.so : swapbg.o
+plugins/mirrorh.so : mirrorh.o
+plugins/mirrorv.so : mirrorv.o
+plugins/tile.so : tile.o
+plugins/expose.so : expose.o
 
 clean :
 	rm -f *.o imgproc plugins/*.so depend.mak
