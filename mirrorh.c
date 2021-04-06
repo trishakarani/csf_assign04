@@ -1,8 +1,3 @@
-//
-// Example plugin: it just swaps the blue and green color component
-// values for each pixel in the source image.
-//
-
 #include <stdlib.h>
 #include "image_plugin.h"
 
@@ -48,7 +43,6 @@ Image *transform_image(Image *source, void *arg_data) {
             out->data[r*width + c] = source->data[r*width + (width - 1 - c)];
         }
     }
-
 
 	free(args);
 

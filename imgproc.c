@@ -18,7 +18,7 @@ int main(int argc, char** argv) {
     // list command
     if (argc == 2) {
 	    if (strcmp(argv[1], "list") != 0) {
-	        fatalError("Unknown command name");
+	        fatalError("Unknown command name\n");
 	    } else {
 		    printf("Loaded %u plugin(s)\n", all.numPlugins); 
 		    for (uint32_t i = 0; i < all.numPlugins; i++) {
@@ -45,8 +45,6 @@ int main(int argc, char** argv) {
         fatalError("Specified plugin not found"); 
     }
     Image * inputImg = img_read_png(argv[3]);
-    // creating a plugin argument object - what to do if no addtl args? still call parse_arguments?
-    // yes still call parse_arguments, see swapbg - takes no args, just returns an empty allocated chunk
     void * argPtr = cursor->parse_arguments(argc - 5, argv + 5); // will be freed by plugin
     Image * transformedImg = cursor->transform_image(inputImg, argPtr); // check for null?
     if (img_write_png(transformedImg, argv[4]) == 0) {

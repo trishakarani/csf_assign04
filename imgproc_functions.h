@@ -4,6 +4,7 @@
 
 #include <stdint.h>
 #include "image.h"
+
 typedef struct {
     void *handle;
     const char *(*get_plugin_name)(void);

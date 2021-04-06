@@ -16,13 +16,13 @@ const char *get_plugin_desc(void) {
 
 void *parse_arguments(int num_args, char *args[]) {
     if (num_args != 1) {
-	exit(1); 
-        //fatalError("Incorrect number of arguments for expose\n");
+	    printf("Error: Incorrect number of arguments for tile\n");
+        exit(1); 
     }
     unsigned factor = 0U;
-    if (atol(args[0]) < 0) {
-	exit(1);
-        //fatalError("Factor cannot be negative\n");
+    if (atol(args[0]) <= 0) {
+        printf("Error: Factor must be a positive integer\n");
+	    exit(1);
     } else {
         sscanf(args[0], "%u", &factor);
     }
@@ -48,7 +48,7 @@ Image *transform_image(Image *source, void *arg_data) {
     unsigned block_widths[num_blocks];
     unsigned block_heights[num_blocks];
     unsigned block_height = height/factor, block_width = width/factor;
-/*
+
     for (unsigned i = 0; i < num_blocks; i++) {
         block_widths[i] = block_width;
         block_heights[i] = block_height;
@@ -66,7 +66,7 @@ Image *transform_image(Image *source, void *arg_data) {
     }
 
     unsigned counter = 0; 
-  */  
+  /* 
 
     for (unsigned h = 0; h < block_height; h++) {  // will traverse over all pixels of a tile
         for (unsigned w = 0; w < block_width; w++) {
@@ -81,7 +81,7 @@ Image *transform_image(Image *source, void *arg_data) {
             }
         }
     }
-/*
+*/
     for (unsigned r = 0; r < block_heights[0]; r++) {  // will traverse over all pixels of a tile - r and c are indexes within a tile
         for (unsigned c = 0; c < block_widths[0]; c++) {
             unsigned pixelVal = source->data[r*factor*width + c*factor]; // only need to calculate once for each location
@@ -104,7 +104,7 @@ Image *transform_image(Image *source, void *arg_data) {
             }
         }
     }
-*/
+
 
     free(args); 
     return out; 
