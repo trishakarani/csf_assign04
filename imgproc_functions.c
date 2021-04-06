@@ -24,31 +24,30 @@ AllPlugins getPlugins(void) {
 
     struct dirent * filePtr = readdir(pluginDirPtr); 
     while(filePtr != NULL) {
-	if (strstr(filePtr->d_name, ".so")) { //WILL ANY OTHER FILE HAVE .SO
-	    pluginCount++; 
-	    if (pluginCount > 5) {
-		    plugins = (Plugin *)realloc(plugins, sizeof(Plugin) * pluginCount); 
-	    }
-	    char pluginPath[1000];
-	    sprintf(pluginPath, "%s/%s", pluginDirName, filePtr->d_name);
-	    Plugin newPlugin; 
-	    newPlugin.handle = dlopen(pluginPath, RTLD_LAZY);
-	    *(void **) (&newPlugin.get_plugin_name) = dlsym(newPlugin.handle, "get_plugin_name");
-	    *(void **) (&newPlugin.get_plugin_desc) = dlsym(newPlugin.handle, "get_plugin_desc"); 
-	    *(void **) (&newPlugin.parse_arguments) = dlsym(newPlugin.handle, "parse_arguments"); 
-	    *(void **) (&newPlugin.transform_image) = dlsym(newPlugin.handle, "transform_image");
+	    if (strstr(filePtr->d_name, ".so")) { //WILL ANY OTHER FILE HAVE .SO
+	        pluginCount++; 
+	        if (pluginCount > 5) {
+		        plugins = (Plugin *)realloc(plugins, sizeof(Plugin) * pluginCount); 
+	        }
+	        char pluginPath[1000];
+	        sprintf(pluginPath, "%s/%s", pluginDirName, filePtr->d_name);
+	        Plugin newPlugin; 
+	        newPlugin.handle = dlopen(pluginPath, RTLD_LAZY);
+	        *(void **) (&newPlugin.get_plugin_name) = dlsym(newPlugin.handle, "get_plugin_name");
+	        *(void **) (&newPlugin.get_plugin_desc) = dlsym(newPlugin.handle, "get_plugin_desc"); 
+	        *(void **) (&newPlugin.parse_arguments) = dlsym(newPlugin.handle, "parse_arguments"); 
+	        *(void **) (&newPlugin.transform_image) = dlsym(newPlugin.handle, "transform_image");
 
-	    if (newPlugin.get_plugin_desc == NULL || newPlugin.get_plugin_name == NULL || 
-		newPlugin.parse_arguments == NULL || newPlugin.transform_image == NULL) {
-		fatalError("Required API function not found\n"); 
-	    }
-	    plugins[pluginCount-1] = newPlugin;  
-	    filePtr = readdir(pluginDirPtr);
-	} else {
-	    filePtr = readdir(pluginDirPtr);
-	    continue; 
-
-	}
+	        if (newPlugin.get_plugin_desc == NULL || newPlugin.get_plugin_name == NULL || 
+		        newPlugin.parse_arguments == NULL || newPlugin.transform_image == NULL) {
+		        fatalError("Required API function not found\n"); 
+	        }
+	        plugins[pluginCount-1] = newPlugin;  
+	        filePtr = readdir(pluginDirPtr);
+	    } else {
+	        filePtr = readdir(pluginDirPtr);
+	        continue; 
+        }
 
     }
 
@@ -64,8 +63,8 @@ AllPlugins getPlugins(void) {
     AllPlugins all = {pluginCount, plugins};
 
     return all; 	
-
 }
+
 
 void fatalError(char * msg) {
     printf("Error: ");
