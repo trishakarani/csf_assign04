@@ -19,6 +19,7 @@ int main(int argc, char** argv) {
     // list command
     if (argc == 2) {
 	    if (strcmp(argv[1], "list") != 0) {
+            free(plugins);
 	        fatalError("Unknown command name\n");
             //printf("Error: Unknown command name\n");
             //exit(1);
@@ -33,6 +34,7 @@ int main(int argc, char** argv) {
     
     // exec command
     if (strcmp(argv[1], "exec") != 0) {
+        free(plugins);
 	    fatalError("Unknown command name"); 
     }
     // find a plugin whose name matches
@@ -45,14 +47,17 @@ int main(int argc, char** argv) {
         cursor += 1;
     } // cursor should point to correct Plugin object
     if (cursor == NULL) {
+        free(plugins);
         fatalError("Specified plugin not found"); 
     }
     Image * inputImg = img_read_png(argv[3]);
     void * argPtr = cursor->parse_arguments(argc - 5, argv + 5); // will be freed by plugin
     Image * transformedImg = cursor->transform_image(inputImg, argPtr); // check for null?
     if (img_write_png(transformedImg, argv[4]) == 0) {
+        free(plugins);
         fatalError("Transofrmed image could not be written as png");
     }
+    free(plugins);
 
     return 0; 
 
