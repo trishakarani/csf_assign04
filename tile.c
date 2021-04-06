@@ -16,13 +16,13 @@ const char *get_plugin_desc(void) {
 
 void *parse_arguments(int num_args, char *args[]) {
     if (num_args != 1) {
-	    printf("Error: Incorrect number of arguments for tile\n");
-        exit(1); 
+	return NULL;
+        //exit(1); 
     }
     unsigned factor = 0U;
     if (atol(args[0]) <= 0) {
-        printf("Error: Factor must be a positive integer\n");
-	    exit(1);
+	return NULL;
+	//exit(1);
     } else {
         sscanf(args[0], "%u", &factor);
     }

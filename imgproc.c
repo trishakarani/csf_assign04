@@ -19,7 +19,7 @@ int main(int argc, char** argv) {
     // list command
     if (argc == 2) {
 	    if (strcmp(argv[1], "list") != 0) {
-            free(plugins);
+            freePlugins(a);
 	    fatalError("Unknown command name\n");
             //printf("Error: Unknown command name\n");
             //exit(1);
@@ -34,7 +34,7 @@ int main(int argc, char** argv) {
     
     // exec command
     if (strcmp(argv[1], "exec") != 0) {
-        free(plugins);
+        freePlugins(a);
 	fatalError("Unknown command name"); 
     }
     // find a plugin whose name matches
@@ -49,7 +49,7 @@ int main(int argc, char** argv) {
     }
 
     if (pluginLoc == -1) { 
-	free(plugins);
+	freePlugins(a);
         fatalError("Specified plugin not found");
     }
     
@@ -67,13 +67,29 @@ int main(int argc, char** argv) {
   */  
     Image * inputImg = img_read_png(argv[3]);
     if (inputImg == NULL) {
-	free(plugins); 
+	img_destroy(inputImg); 
+	freePlugins(a); 
 	fatalError("Invalid image file\n"); 
     }
     void * argPtr = plugins[pluginLoc].parse_arguments(argc - 5, argv + 5); // will be freed by plugin
+    if (argPtr == NULL) {
+	img_destroy(inputImg);
+	freePlugins(a); 
+	fatalError("Improper conditions for plugin\n"); 
+    }    
+
     Image * transformedImg = plugins[pluginLoc].transform_image(inputImg, argPtr); // check for null?
+    
+    if (transformedImg == NULL) {
+	img_destroy(inputImg);
+        freePlugins(a);
+        fatalError("Invalid image transformation\n");
+    }
+    
     if (img_write_png(transformedImg, argv[4]) == 0) {
-        free(plugins);
+	img_destroy(inputImg);
+        freePlugins(a);
+	img_destroy(transformedImg); 
         fatalError("Transofrmed image could not be written as png");
     }
     //close the handle of each plugin

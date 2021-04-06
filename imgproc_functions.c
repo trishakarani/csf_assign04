@@ -60,11 +60,18 @@ AllPlugins getPlugins(void) {
 	    plugins = (Plugin *)realloc(plugins, sizeof(Plugin) * pluginCount);
     }
 
-    AllPlugins all = {pluginCount, plugins};
+    AllPlugins a = {pluginCount, plugins};
 
-    return all; 	
+    return a; 	
 }
 
+void freePlugins(AllPlugins a) {
+    Plugin * plugins = a.allPlugins; 
+    for (uint32_t i = 0; i < a.numPlugins; i++) {
+	dlclose(plugins[i].handle); 
+    }
+    free(plugins); 
+}
 
 void fatalError(char * msg) {
     printf("Error: ");
