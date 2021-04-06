@@ -20,7 +20,7 @@ int main(int argc, char** argv) {
     if (argc == 2) {
 	    if (strcmp(argv[1], "list") != 0) {
             free(plugins);
-	        fatalError("Unknown command name\n");
+	    fatalError("Unknown command name\n");
             //printf("Error: Unknown command name\n");
             //exit(1);
 	    } else {
@@ -35,14 +35,14 @@ int main(int argc, char** argv) {
     // exec command
     if (strcmp(argv[1], "exec") != 0) {
         free(plugins);
-	    fatalError("Unknown command name"); 
+	fatalError("Unknown command name"); 
     }
     // find a plugin whose name matches
     // name is in argv[2]    
     Plugin * cursor = plugins;
     int pluginLoc = -1; 
     for (uint32_t i = 0; i < a.numPlugins; i++) {
-	    if (strcmp(argv[2], plugins[i].get_plugin_name())) {
+	    if (strcmp(argv[2], plugins[i].get_plugin_name()) == 0) {
 		pluginLoc = i; 
 		break;
 	    }
