@@ -19,9 +19,9 @@ int main(int argc, char** argv) {
     // list command
     if (argc == 2) {
 	    if (strcmp(argv[1], "list") != 0) {
-	        //fatalError("Unknown command name\n");
-            printf("Error: Unknown command name\n");
-            exit(1);
+	        fatalError("Unknown command name\n");
+            //printf("Error: Unknown command name\n");
+            //exit(1);
 	    } else {
 		    printf("Loaded %u plugin(s)\n", all.numPlugins); 
 		    for (uint32_t i = 0; i < all.numPlugins; i++) {
