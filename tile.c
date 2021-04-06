@@ -61,7 +61,7 @@ Image *transform_image(Image *source, void *arg_data) {
     }
     for (unsigned i = 0; i < height_rem; i++) {  // for each "1" in the remainder, adds it to the heights of a row, starting from top
         for (unsigned c = 0; c < factor; c++) {
-            block_widths[i*factor + c] += 1;
+            block_heights[i*factor + c] += 1;
         }
     }
 
