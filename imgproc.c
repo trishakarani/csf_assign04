@@ -21,8 +21,6 @@ int main(int argc, char** argv) {
 	    if (strcmp(argv[1], "list") != 0) {
             freePlugins(a);
 	    fatalError("Unknown command name\n");
-            //printf("Error: Unknown command name\n");
-            //exit(1);
 	    } else {
 		    printf("Loaded %u plugin(s)\n", a.numPlugins); 
 		    for (uint32_t i = 0; i < a.numPlugins; i++) {
@@ -33,13 +31,12 @@ int main(int argc, char** argv) {
     }
     
     // exec command
-    if (strcmp(argv[1], "exec") != 0) {
+    if (argc < 5 || strcmp(argv[1], "exec") != 0) {
         freePlugins(a);
 	fatalError("Unknown command name"); 
     }
     // find a plugin whose name matches
     // name is in argv[2]    
-    Plugin * cursor = plugins;
     int pluginLoc = -1; 
     for (uint32_t i = 0; i < a.numPlugins; i++) {
 	    if (strcmp(argv[2], plugins[i].get_plugin_name()) == 0) {
@@ -53,18 +50,6 @@ int main(int argc, char** argv) {
         fatalError("Specified plugin not found");
     }
     
-/*
-    while (cursor != NULL) {
-        if (strcmp(argv[2], cursor->get_plugin_name()) == 0) {
-            break;
-        }
-        cursor += 1;
-    } // cursor should point to correct Plugin object
-    if (cursor == NULL) {
-        free(plugins);
-        fatalError("Specified plugin not found"); 
-    }
-  */  
     Image * inputImg = img_read_png(argv[3]);
     if (inputImg == NULL) {
 	img_destroy(inputImg); 
@@ -92,8 +77,10 @@ int main(int argc, char** argv) {
 	img_destroy(transformedImg); 
         fatalError("Transofrmed image could not be written as png");
     }
-    //close the handle of each plugin
-    free(plugins);
+    
+    img_destroy(inputImg);
+    img_destroy(transformedImg);
+    freePlugins(a);
     
     return 0; 
 
