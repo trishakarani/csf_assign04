@@ -1,3 +1,13 @@
+/*
+ * image processing
+ * main function
+ * CSF Assignment 4
+ * C. Levitt
+ * clevitt1@jh.edu
+ * T. Karani
+ * tkarani1@jh.edu
+*/
+
 #include <stdlib.h>
 #include <stdint.h>
 #include <stdio.h>

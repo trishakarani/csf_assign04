@@ -1,3 +1,13 @@
+/*
+ * image processing
+ * expose plugin - multiplies rgb values by a given factor
+ * CSF Assignment 4
+ * C. Levitt
+ * clevitt1@jh.edu
+ * T. Karani
+ * tkarani1@jh.edu
+*/
+
 #include <stdlib.h>
 #include <stdio.h>
 #include "image_plugin.h"
@@ -15,15 +25,12 @@ const char *get_plugin_desc(void) {
 }
 
 void *parse_arguments(int num_args, char *args[]) {
-    //check if factor is neg - fatalerror
     if (num_args != 1) {
-	return NULL;
-       //exit(1); 
+	    return NULL;
     }
     float factor = atof(args[0]);
     if (factor < 0) {
-	return NULL;
-        //exit(1); 
+	    return NULL;
     }
     struct Arguments argObj = {factor};
     struct Arguments * argPtr = malloc(sizeof(struct Arguments));
@@ -35,7 +42,6 @@ void *parse_arguments(int num_args, char *args[]) {
 static uint32_t expose_rgb(uint32_t pix, float factor) {
 	uint8_t r, g, b, a; 
 	img_unpack_pixel(pix, &r, &g, &b, &a); 
-	
 	if (r*factor > 255) { r = (uint8_t)255; } 
 	    else { r  = (uint8_t)(r*factor); }
 	if (g*factor > 255) { g = (uint8_t)255; } 
@@ -43,8 +49,8 @@ static uint32_t expose_rgb(uint32_t pix, float factor) {
     if (b*factor > 255) { b = (uint8_t)255; } 
         else { b  = (uint8_t)(b*factor); }
 	return img_pack_pixel(r, g, b, a); 
-
 }
+
 
 Image *transform_image(Image *source, void *arg_data) {
 	struct Arguments *args = arg_data;
@@ -55,12 +61,10 @@ Image *transform_image(Image *source, void *arg_data) {
 		free(args); 
 		return NULL; 
 	}
-
 	unsigned num_pixels = source->width * source->height; 
 	for (unsigned i = 0; i < num_pixels; i++) {
 		out->data[i] = expose_rgb(source->data[i], factor); 
 	}
-
 	free(args); 
 	return out; 
 }

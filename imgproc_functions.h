@@ -1,4 +1,14 @@
 
+/*
+ * image processing
+ * header for functions
+ * CSF Assignment 4
+ * C. Levitt
+ * clevitt1@jh.edu
+ * T. Karani
+ * tkarani1@jh.edu
+*/
+
 #ifndef IMGPROC_FUNCTIONS_H
 #define IMGPROC_FUNCTIONS_H
 
