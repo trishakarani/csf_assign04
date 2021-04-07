@@ -27,8 +27,9 @@ int main(int argc, char** argv) {
     Plugin * plugins = a.allPlugins; 
     // list command
     if (argc == 2) {
-	    if (strcmp(argv[1], "list") != 0) {
-	        fatalError(a, "Unknown command name\n");
+	    if (strcmp(argv[1], "list") != 0) {    
+	        freePlugins(a);
+		fatalError("Unknown command name\n");
 	    } else {
 		    printf("Loaded %u plugin(s)\n", a.numPlugins); 
 		    for (uint32_t i = 0; i < a.numPlugins; i++) {
@@ -38,7 +39,8 @@ int main(int argc, char** argv) {
     }
     // exec command
     if (argc < 5 || strcmp(argv[1], "exec") != 0) {
-	fatalError(a, "Unknown command name"); 
+	freePlugins(a);
+	fatalError("Unknown command name"); 
     }   
     int pluginLoc = -1; 
     for (uint32_t i = 0; i < a.numPlugins; i++) {  // find a plugin whose name matches - name is in argv[2] 
@@ -48,27 +50,32 @@ int main(int argc, char** argv) {
 	    }
     }
     if (pluginLoc == -1) { 
-        fatalError(a, "Specified plugin not found");
+	freePlugins(a); 
+        fatalError("Specified plugin not found");
     }
     Image * inputImg = img_read_png(argv[3]);     // read input image
     if (inputImg == NULL) {
 	    img_destroy(inputImg); 
-	    fatalError(a, "Invalid image file\n"); 
+	    freePlugins(a);	
+	    fatalError("Invalid image file\n"); 
     }
     void * argPtr = plugins[pluginLoc].parse_arguments(argc - 5, argv + 5); // will be freed by plugin
     if (argPtr == NULL) {
 	    img_destroy(inputImg);
-	    fatalError(a, "Improper conditions for plugin\n"); 
+	    freePlugins(a);
+	    fatalError("Improper conditions for plugin\n"); 
     }    
     Image * transformedImg = plugins[pluginLoc].transform_image(inputImg, argPtr); // execute transformation
     if (transformedImg == NULL) {
         img_destroy(inputImg);
-        fatalError(a, "Invalid image transformation\n");
+	freePlugins(a);
+        fatalError("Invalid image transformation\n");
     }
     if (img_write_png(transformedImg, argv[4]) == 0) {   // write as png
 	img_destroy(inputImg);
-	img_destroy(transformedImg); 
-        fatalError(a, "Transofrmed image could not be written as png");
+	img_destroy(transformedImg);
+	freePlugins(a); 
+        fatalError("Transofrmed image could not be written as png");
     }
     img_destroy(inputImg);
     img_destroy(transformedImg);

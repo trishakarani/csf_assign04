@@ -45,7 +45,8 @@ AllPlugins getPlugins(void) {
 	    //exit program if any functions do not exist 
 	    if (newPlugin.get_plugin_desc == NULL || newPlugin.get_plugin_name == NULL || 
 		newPlugin.parse_arguments == NULL || newPlugin.transform_image == NULL) {
-		fatalError(a, "Required API function not found\n"); 
+		free(plugins); 
+		fatalError("Required API function not found\n"); 
 	    }
 	    plugins[pluginCount-1] = newPlugin;  
 	    filePtr = readdir(pluginDirPtr);  //continue reading file
@@ -58,14 +59,15 @@ AllPlugins getPlugins(void) {
 
     closedir(pluginDirPtr);
 
-    AllPlugins a = {pluginCount, plugins};
     if (pluginCount == 0) { //if no plugins were valid, exit program 
-	fatalError(a, "No valid plugins\n"); 
+	free(plugins);
+	fatalError("No valid plugins\n"); 
     } else if (pluginCount < 5) { //reduce size of allocated memory if needed
 	plugins = (Plugin *)realloc(plugins, sizeof(Plugin) * pluginCount);
     } 
 
 
+    AllPlugins a = {pluginCount, plugins};
     return a; 	
 }
 
@@ -77,8 +79,7 @@ void freePlugins(AllPlugins a) {
     free(plugins); 
 }
 
-void fatalError(AllPlugins a, char * msg) {
-    freePlugins(a);
+void fatalError(char * msg) {
     printf("Error: ");
     printf("%s", msg);
     exit(1);
