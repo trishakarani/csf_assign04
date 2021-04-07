@@ -13,7 +13,7 @@ AllPlugins getPlugins(void) {
     //find directory with plugin shared libraries 
     char * pluginDirName = getenv("PLUGIN_DIR");   //check if PLUGIN_DIR is set
     if (pluginDirName == NULL) { //PLUGIN_DIR not set
-	    pluginDirName = "./plugins";
+	pluginDirName = "./plugins";
     }
 
     DIR * pluginDirPtr = opendir(pluginDirName); 
@@ -24,48 +24,47 @@ AllPlugins getPlugins(void) {
 
     struct dirent * filePtr = readdir(pluginDirPtr); 
     while(filePtr != NULL) { //read until eof 
-	    if (strstr(filePtr->d_name, ".so")) { //check if d_name is for a plugin file (.so)
-	        pluginCount++; 
-	        if (pluginCount > 5) {
-		        plugins = (Plugin *)realloc(plugins, sizeof(Plugin) * pluginCount); 
-	        }
+	if (strstr(filePtr->d_name, ".so")) { //check if d_name is for a plugin file (.so)
+	    pluginCount++; 
+	    if (pluginCount > 5) {
+		plugins = (Plugin *)realloc(plugins, sizeof(Plugin) * pluginCount); 
+	    }
 
-		//create path to plugin file 
-	        char pluginPath[1000];
-	        sprintf(pluginPath, "%s/%s", pluginDirName, filePtr->d_name);
-	        Plugin newPlugin; 
-	        newPlugin.handle = dlopen(pluginPath, RTLD_LAZY);
+	    //create path to plugin file 
+	    char pluginPath[1000];
+	    sprintf(pluginPath, "%s/%s", pluginDirName, filePtr->d_name);
+	    Plugin newPlugin; 
+	    newPlugin.handle = dlopen(pluginPath, RTLD_LAZY);
 
-		//get function pointers for all fields of the Plugin
-	        *(void **) (&newPlugin.get_plugin_name) = dlsym(newPlugin.handle, "get_plugin_name");
-	        *(void **) (&newPlugin.get_plugin_desc) = dlsym(newPlugin.handle, "get_plugin_desc"); 
-	        *(void **) (&newPlugin.parse_arguments) = dlsym(newPlugin.handle, "parse_arguments"); 
-	        *(void **) (&newPlugin.transform_image) = dlsym(newPlugin.handle, "transform_image");
+	    //get function pointers for all fields of the Plugin
+	    *(void **) (&newPlugin.get_plugin_name) = dlsym(newPlugin.handle, "get_plugin_name");
+	    *(void **) (&newPlugin.get_plugin_desc) = dlsym(newPlugin.handle, "get_plugin_desc"); 
+	    *(void **) (&newPlugin.parse_arguments) = dlsym(newPlugin.handle, "parse_arguments"); 
+	    *(void **) (&newPlugin.transform_image) = dlsym(newPlugin.handle, "transform_image");
 
-		//exit program if any functions do not exist 
-	        if (newPlugin.get_plugin_desc == NULL || newPlugin.get_plugin_name == NULL || 
-		        newPlugin.parse_arguments == NULL || newPlugin.transform_image == NULL) {
-		        fatalError("Required API function not found\n"); 
-	        }
-	        plugins[pluginCount-1] = newPlugin;  
-	        filePtr = readdir(pluginDirPtr);  //continue reading file
-	    } else { //if not a .so file, continue reading file
-	        filePtr = readdir(pluginDirPtr);
-	        continue; 
-        }
+	    //exit program if any functions do not exist 
+	    if (newPlugin.get_plugin_desc == NULL || newPlugin.get_plugin_name == NULL || 
+		newPlugin.parse_arguments == NULL || newPlugin.transform_image == NULL) {
+		fatalError(a, "Required API function not found\n"); 
+	    }
+	    plugins[pluginCount-1] = newPlugin;  
+	    filePtr = readdir(pluginDirPtr);  //continue reading file
+	} else { //if not a .so file, continue reading file
+	    filePtr = readdir(pluginDirPtr);
+	    continue; 
+	}
 
     }
 
     closedir(pluginDirPtr);
 
-    if (pluginCount == 0) { //if no plugins were valid, exit program
-	    free(plugins); 
-	    fatalError("No valid plugins\n"); 
+    AllPlugins a = {pluginCount, plugins};
+    if (pluginCount == 0) { //if no plugins were valid, exit program 
+	fatalError(a, "No valid plugins\n"); 
     } else if (pluginCount < 5) { //reduce size of allocated memory if needed
-	    plugins = (Plugin *)realloc(plugins, sizeof(Plugin) * pluginCount);
+	plugins = (Plugin *)realloc(plugins, sizeof(Plugin) * pluginCount);
     } 
 
-    AllPlugins a = {pluginCount, plugins};
 
     return a; 	
 }
@@ -78,7 +77,8 @@ void freePlugins(AllPlugins a) {
     free(plugins); 
 }
 
-void fatalError(char * msg) {
+void fatalError(AllPlugins a, char * msg) {
+    freePlugins(a);
     printf("Error: ");
     printf("%s", msg);
     exit(1);

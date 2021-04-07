@@ -33,6 +33,6 @@ void freePlugins(AllPlugins a);
 /* 
  * Prints the given message to stderr and exits the program
  */
-void fatalError(char * msg);
+void fatalError(AllPlugins a, char * msg);
 
 #endif
