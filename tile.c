@@ -49,7 +49,6 @@ Image *transform_image(Image *source, void *arg_data) {
         return NULL;
     }
     unsigned width = source->width, height = source->height;
-    unsigned num_pixels = width * height;
     unsigned num_blocks = factor * factor; 
     unsigned block_widths[num_blocks];
     unsigned block_heights[num_blocks];
