@@ -17,34 +17,39 @@ AllPlugins getPlugins(void) {
     }
 
     DIR * pluginDirPtr = opendir(pluginDirName); 
-    assert(pluginDirPtr != NULL); //error with opendir 
+    assert(pluginDirPtr != NULL); //check for error with opendir 
 
-    Plugin * plugins = malloc(sizeof(Plugin) * 5); //HARDCODE THE SIZE?
+    Plugin * plugins = malloc(sizeof(Plugin) * 5); //create array of Plugins starting with size 5 
     int pluginCount = 0;      
 
     struct dirent * filePtr = readdir(pluginDirPtr); 
-    while(filePtr != NULL) {
-	    if (strstr(filePtr->d_name, ".so")) { //WILL ANY OTHER FILE HAVE .SO
+    while(filePtr != NULL) { //read until eof 
+	    if (strstr(filePtr->d_name, ".so")) { //check if d_name is for a plugin file (.so)
 	        pluginCount++; 
 	        if (pluginCount > 5) {
 		        plugins = (Plugin *)realloc(plugins, sizeof(Plugin) * pluginCount); 
 	        }
+
+		//create path to plugin file 
 	        char pluginPath[1000];
 	        sprintf(pluginPath, "%s/%s", pluginDirName, filePtr->d_name);
 	        Plugin newPlugin; 
 	        newPlugin.handle = dlopen(pluginPath, RTLD_LAZY);
+
+		//get function pointers for all fields of the Plugin
 	        *(void **) (&newPlugin.get_plugin_name) = dlsym(newPlugin.handle, "get_plugin_name");
 	        *(void **) (&newPlugin.get_plugin_desc) = dlsym(newPlugin.handle, "get_plugin_desc"); 
 	        *(void **) (&newPlugin.parse_arguments) = dlsym(newPlugin.handle, "parse_arguments"); 
 	        *(void **) (&newPlugin.transform_image) = dlsym(newPlugin.handle, "transform_image");
 
+		//exit program if any functions do not exist 
 	        if (newPlugin.get_plugin_desc == NULL || newPlugin.get_plugin_name == NULL || 
 		        newPlugin.parse_arguments == NULL || newPlugin.transform_image == NULL) {
 		        fatalError("Required API function not found\n"); 
 	        }
 	        plugins[pluginCount-1] = newPlugin;  
-	        filePtr = readdir(pluginDirPtr);
-	    } else {
+	        filePtr = readdir(pluginDirPtr);  //continue reading file
+	    } else { //if not a .so file, continue reading file
 	        filePtr = readdir(pluginDirPtr);
 	        continue; 
         }
@@ -53,12 +58,12 @@ AllPlugins getPlugins(void) {
 
     closedir(pluginDirPtr);
 
-    if (pluginCount == 0) {
+    if (pluginCount == 0) { //if no plugins were valid, exit program
 	    free(plugins); 
-	    plugins = NULL; 
-    } else if (pluginCount < 5) {
+	    fatalError("No valid plugins\n"); 
+    } else if (pluginCount < 5) { //reduce size of allocated memory if needed
 	    plugins = (Plugin *)realloc(plugins, sizeof(Plugin) * pluginCount);
-    }
+    } 
 
     AllPlugins a = {pluginCount, plugins};
 
