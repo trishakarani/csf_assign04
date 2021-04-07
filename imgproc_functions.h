@@ -22,12 +22,17 @@ typedef struct {
 *  Searches for available plugin shared libraries, creates an allocated
 *  array of Plugins to represent each
 *
-*
 */
 AllPlugins getPlugins(void);
 
+/* 
+ * Closes all open library plugins using dlclose 
+ * and frees the allocated Plugins memory */
 void freePlugins(AllPlugins a);
 
+/* 
+ * Prints the given message to stderr and exits the program
+ */
 void fatalError(char * msg);
 
 #endif
